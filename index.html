@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farm to Fork – Hi-Fi Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060D11;--cd:#0F1A1F;--bd:#2A3D44;--ac:#6FF2D0;--tx:#EEF5F3;--t2:#B9C9C5;--wn:#FFC76B;--er:#FF9E9E;--sc:1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:#1b2428;display:flex;justify-content:center;padding:10px;font-family:Inter,system-ui,"Noto Sans Telugu",sans-serif;color:var(--tx)}
+#ph{width:100%;max-width:390px;height:min(780px,calc(100dvh - 20px));min-height:620px;background:var(--bg);border:2px solid var(--bd);border-radius:28px;display:flex;flex-direction:column;overflow:hidden;position:relative;font-size:calc(16px*var(--sc))}
+h1,h2{font-family:Orbitron,system-ui,sans-serif;margin:0;font-weight:500}
+h1{font-size:1.05em}h2{font-size:1.5em;line-height:1.3}
+button{font:inherit;color:var(--tx);cursor:pointer;min-height:48px;min-width:48px;border-radius:12px;border:2px solid var(--bd);background:var(--cd);padding:8px 14px}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.top{display:flex;gap:6px;justify-content:flex-end;padding:6px 10px;align-items:center}
+.top button{min-height:44px;font-size:.8em;padding:4px 10px}
+.hd{display:flex;align-items:center;gap:10px;padding:2px 14px 8px;min-height:52px}
+.bk{border:0;background:none;color:var(--ac);font-weight:700;padding:0 8px 0 0}
+main{flex:1;overflow-y:auto;padding:6px 14px 16px}
+.pri{width:100%;background:var(--ac);color:#04201A;border-color:var(--ac);font-weight:700;margin-top:10px}
+.pri[disabled]{opacity:.5}.sec{width:100%;margin-top:10px}
+.cd{background:var(--cd);border:2px solid var(--bd);border-radius:14px;padding:12px;margin-bottom:10px}
+.cd.btn{width:100%;text-align:left;display:block}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sub{color:var(--t2);font-size:.85em}.lbl{color:var(--t2);font-size:.85em;margin:10px 0 4px}
+.ac{color:var(--ac)}.wn{color:var(--wn)}.er{color:var(--er);font-size:.9em;margin-top:6px}
+input,textarea{font:inherit;width:100%;min-height:52px;background:var(--cd);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:10px}
+input.bad,textarea.bad{border-color:var(--er)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:6px 0}.chip{white-space:nowrap;border-radius:22px}.on{border-color:var(--ac)!important;background:#12332d!important;color:var(--ac)!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:3.2em;min-height:96px;width:100%;border:0}
+.st{display:flex;align-items:center;gap:6px}.st b{min-width:26px;text-align:center}
+.tabs{display:flex;border-top:2px solid var(--bd);background:var(--cd)}.tabs button{flex:1;border:0;border-radius:0;background:none;min-height:56px;font-size:.85em;color:var(--t2)}.tabs .on{background:none!important;font-weight:700}
+.ok{text-align:center;padding:20px 0}.ck{width:104px;height:104px;border-radius:50%;background:#12332d;color:var(--ac);font-size:60px;line-height:104px;margin:0 auto 14px;border:2px solid var(--ac)}
+.toast{position:absolute;left:12px;right:12px;bottom:70px;background:var(--ac);color:#04201A;padding:8px 8px 8px 14px;border-radius:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.toast button{background:#04201A;color:var(--ac);border-color:#04201A;min-height:44px}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;z-index:5}.sh{background:var(--bg);width:100%;padding:16px;border-radius:20px 20px 0 0;max-height:92%;overflow:auto;border-top:2px solid var(--bd)}
+.step{display:flex;gap:12px;margin:12px 0}.dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex:none;font-size:.85em}.dot.d{background:#12332d;border-color:var(--ac);color:var(--ac)}
+.pill{display:inline-block;border:2px solid var(--ac);color:var(--ac);border-radius:18px;padding:2px 10px;font-size:.8em;font-weight:700}.pill.w{border-color:var(--wn);color:var(--wn)}.pill.e{border-color:var(--er);color:var(--er)}
+.big{font-family:Orbitron,sans-serif;font-size:2.2em;color:var(--ac)}
+table{width:100%;border-collapse:collapse}td{padding:7px 0;color:var(--t2)}td:last-child{text-align:right;color:var(--tx)}tr.t td{color:var(--ac);font-weight:700;border-top:1px solid var(--bd)}
+.vid{background:#000;border-radius:12px;aspect-ratio:16/9;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:10px;font-size:3em}.bar{height:8px;background:#444;border-radius:4px;width:100%}.bar i{display:block;height:100%;background:var(--ac);border-radius:4px}.cap{font-size:.35em;background:rgba(0,0,0,.75);padding:4px 8px;border-radius:6px;margin-top:6px;text-align:center}
+
+/* A downloaded web font is used for Telugu; no local installation is needed. */
+html[lang="te"] #ph { font-family: "Noto Sans Telugu", "Nirmala UI", "Gautami", sans-serif; }
+html[lang="te"] #ph h1,
+html[lang="te"] #ph h2,
+html[lang="te"] #ph .big { font-family: "Noto Sans Telugu", "Nirmala UI", sans-serif; }
+html[lang="te"] #ph .tabs button { font-size: .79em; overflow-wrap: anywhere; padding-inline: 3px; }
+html[lang="te"] #ph .hd h1,
+html[lang="te"] #ph button { overflow-wrap: anywhere; }
+html[lang="te"] #ph .sub { line-height: 1.55; }
+</style></head>
+<body><div id="ph" role="application" aria-label="Farm to Fork prototype"></div>
+<script>
+const TE={Back:'వెనుకకు',Shop:'షాప్',Orders:'ఆర్డర్లు',Account:'ఖాతా',Market:'మార్కెట్',Sell:'అమ్మండి','My listings':'నా లిస్టింగ్‌లు','Sell produce':'పంట అమ్మండి','Place order':'ఆర్డర్ ఇవ్వండి','Add to basket':'బుట్టలో వేయండి',Continue:'కొనసాగండి','Your harvest. Your price.':'మీ పంట. మీ ధర.','Market prices':'మార్కెట్ ధరలు','Check price':'ధర చూడండి','Publish listing':'లిస్టింగ్ ప్రచురించండి','Your produce is live.':'మీ పంట అమ్మకానికి సిద్ధం.','Red gram':'కందులు',Tomato:'టమాటా',Hyderabad:'హైదరాబాద్','Choose crop':'పంటను ఎంచుకోండి','Choose market':'మార్కెట్‌ను ఎంచుకోండి','Asking price / quintal':'అడిగే ధర / క్వింటాల్','Quantity (quintal)':'పరిమాణం (క్వింటాల్)',Retry:'మళ్లీ ప్రయత్నించండి'};
+
+/* All interface copy is localized after each state-driven render.
+   This also handles copy created by template literals and error messages. */
+Object.assign(TE, {
+  "Sign in": "సైన్ ఇన్",
+  "Phone number": "ఫోన్ నంబర్",
+  "+91  Phone number": "+91 ఫోన్ నంబర్",
+  "Enter a 10-digit phone number.": "10 అంకెల ఫోన్ నంబర్ నమోదు చేయండి.",
+  "Demo: enter any 10 digits.": "డెమో: ఏవైనా 10 అంకెలను నమోదు చేయండి.",
+  "Verify number": "ఫోన్ నంబర్ ధృవీకరణ",
+  "Verify OTP": "ఓటీపీ ధృవీకరణ",
+  "4-digit code": "4 అంకెల కోడ్",
+  "Verify": "ధృవీకరించండి",
+  "Resend code": "కోడ్ మళ్లీ పంపండి",
+  "Change number": "నంబర్ మార్చండి",
+  "Demo code: 1234": "డెమో కోడ్: 1234",
+  "That code is incorrect. Try again.": "కోడ్ తప్పుగా ఉంది. మళ్లీ ప్రయత్నించండి.",
+  "Choose your role": "మీ పాత్రను ఎంచుకోండి",
+  "How will you use Farm to Fork?": "ఫార్మ్ టు ఫోర్క్‌ను ఎలా ఉపయోగిస్తారు?",
+  "I'm a buyer": "నేను కొనుగోలుదారుని",
+  "I'm a farmer": "నేను రైతును",
+  "Shop vegetables and fruits": "కూరగాయలు, పండ్లు కొనండి",
+  "Sell produce and view market prices": "పంటను అమ్మండి, మార్కెట్ ధరలు చూడండి",
+  "Back": "వెనుకకు",
+  "Language": "భాష",
+  "Switch to Telugu": "తెలుగులోకి మార్చండి",
+  "Switch to English": "ఇంగ్లీష్‌లోకి మార్చండి",
+  "Smaller text": "చిన్న అక్షరాలు",
+  "Larger text": "పెద్ద అక్షరాలు",
+  "Screen map": "స్క్రీన్ మ్యాప్",
+  "Close": "మూసివేయండి",
+  "Map": "మ్యాప్",
+  "Decrease": "తగ్గించండి",
+  "Increase": "పెంచండి",
+  "Continue": "కొనసాగండి",
+  "Change": "మార్చండి",
+  "Buyer": "కొనుగోలుదారు",
+  "Farmer": "రైతు",
+  "Account": "ఖాతా",
+  "Your account": "మీ ఖాతా",
+  "Switch role": "పాత్రను మార్చండి",
+  "Sign out": "సైన్ అవుట్",
+  "Shop": "షాప్",
+  "Orders": "ఆర్డర్లు",
+  "Market": "మార్కెట్",
+  "Sell": "అమ్మండి",
+  "My listings": "నా అమ్మకపు జాబితాలు",
+  "Buyer · Shop": "కొనుగోలుదారు · షాప్",
+  "Buyer · Product": "కొనుగోలుదారు · ఉత్పత్తి",
+  "Buyer · Basket": "కొనుగోలుదారు · బుట్ట",
+  "Buyer · Empty basket": "కొనుగోలుదారు · ఖాళీ బుట్ట",
+  "Buyer · Checkout": "కొనుగోలుదారు · చెల్లింపు",
+  "Buyer · Order placed": "కొనుగోలుదారు · ఆర్డర్ ఇచ్చారు",
+  "Buyer · Track order": "కొనుగోలుదారు · ఆర్డర్ ట్రాకింగ్",
+  "Buyer · Handling proof": "కొనుగోలుదారు · నిర్వహణ ఆధారం",
+  "Buyer · Report issue": "కొనుగోలుదారు · సమస్య నివేదిక",
+  "Buyer · Orders": "కొనుగోలుదారు · ఆర్డర్లు",
+  "Buyer · Account": "కొనుగోలుదారు · ఖాతా",
+  "Farmer · Market": "రైతు · మార్కెట్",
+  "Farmer · Market detail": "రైతు · మార్కెట్ వివరాలు",
+  "Farmer · Sell or hold": "రైతు · అమ్మాలా, నిల్వ చేయాలా",
+  "Farmer · Sell produce": "రైతు · పంట అమ్మకం",
+  "Farmer · Asking price": "రైతు · అడిగే ధర",
+  "Farmer · Review listing": "రైతు · జాబితా సమీక్ష",
+  "Farmer · Pickup": "రైతు · పంట సేకరణ",
+  "Farmer · Published": "రైతు · ప్రచురించబడింది",
+  "Farmer · My listings": "రైతు · నా జాబితాలు",
+  "Farmer · Price unavailable": "రైతు · ధర అందుబాటులో లేదు",
+  "Farmer · Account": "రైతు · ఖాతా",
+  "Home": "ఇల్లు",
+  "Bengaluru": "బెంగళూరు",
+  "Search": "వెతకండి",
+  "Search vegetables, fruits…": "కూరగాయలు, పండ్లు వెతకండి…",
+  "Filters": "వడపోతలు",
+  "All": "అన్నీ",
+  "Veg": "కూరగాయలు",
+  "Fruits": "పండ్లు",
+  "Under ₹50": "₹50 లోపు",
+  "Fresh picks": "తాజా పంటలు",
+  "From local farms": "స్థానిక పొలాల నుంచి",
+  "No produce found.": "ఉత్పత్తులు ఏవీ దొరకలేదు.",
+  "Tomato": "టమాటా",
+  "Banana": "అరటిపండు",
+  "Apple": "యాపిల్",
+  "Potato": "బంగాళాదుంప",
+  "Brinjal": "వంకాయ",
+  "Red gram": "కందులు",
+  "ADD": "జోడించండి",
+  "Add": "జోడించండి",
+  "Open": "తెరవండి",
+  "View basket": "బుట్ట చూడండి",
+  "added": "జోడించబడింది",
+  "1 kg": "1 కిలో",
+  "500 g": "500 గ్రాములు",
+  "1 dozen": "1 డజను",
+  "Pack size": "ప్యాక్ పరిమాణం",
+  "Farm batch": "పంట బ్యాచ్",
+  "Handling record": "పంట నిర్వహణ రికార్డు",
+  "Handling record · video 28 s": "పంట నిర్వహణ రికార్డు · 28 సెకన్ల వీడియో",
+  "Harvest, sorting and packing": "పంట కోత, వర్గీకరణ, ప్యాకింగ్",
+  "Chemical safety": "రసాయన భద్రత",
+  "Chemical safety · No lab result available": "రసాయన భద్రత · ల్యాబ్ ఫలితం అందుబాటులో లేదు",
+  "No lab result available": "ల్యాబ్ పరీక్ష ఫలితం అందుబాటులో లేదు",
+  "Add to basket": "బుట్టలో వేయండి",
+  "Your basket": "మీ బుట్ట",
+  "Your basket is empty": "మీ బుట్ట ఖాళీగా ఉంది",
+  "Find something fresh for your kitchen.": "మీ వంటగదికి తాజా ఉత్పత్తులను ఎంచుకోండి.",
+  "Browse produce": "ఉత్పత్తులు చూడండి",
+  "Price breakdown": "ధరల వివరాలు",
+  "Farmer receives": "రైతుకు అందేది",
+  "Handling": "నిర్వహణ రుసుము",
+  "Delivery": "డెలివరీ",
+  "Tax": "పన్ను",
+  "Total": "మొత్తం",
+  "of your payment. No hidden fees.": "మీ చెల్లింపులో. అదనపు రుసుములు లేవు.",
+  "Checkout": "చెల్లింపు",
+  "Deliver to Home": "ఇంటికి డెలివరీ",
+  "Your order": "మీ ఆర్డర్",
+  "Delivery slot": "డెలివరీ సమయం",
+  "Payment (last used)": "చెల్లింపు విధానం (చివరిగా వాడినది)",
+  "Cash on delivery": "వస్తువు అందినప్పుడు నగదు చెల్లింపు",
+  "UPI · ending 4417": "యూపీఐ · చివరి అంకెలు 4417",
+  "Total to pay": "చెల్లించాల్సిన మొత్తం",
+  "Place order": "ఆర్డర్ ఇవ్వండి",
+  "Change address (demo)": "చిరునామా మార్చండి (డెమో)",
+  "Order placed": "ఆర్డర్ విజయవంతంగా ఇచ్చారు",
+  "Freshness": "తాజా పంట",
+  "on its way.": "మీ వద్దకు వస్తోంది.",
+  "Order": "ఆర్డర్",
+  "Bill": "బిల్లు",
+  "Token": "టోకెన్",
+  "Items": "వస్తువులు",
+  "Track order": "ఆర్డర్‌ను ట్రాక్ చేయండి",
+  "Continue shopping": "కొనుగోలు కొనసాగించండి",
+  "Order confirmed": "ఆర్డర్ నిర్ధారించబడింది",
+  "Your order has been received": "మీ ఆర్డర్ అందింది",
+  "Packing": "ప్యాకింగ్ జరుగుతోంది",
+  "The farm is preparing your produce": "పొలంలో మీ ఉత్పత్తులను సిద్ధం చేస్తున్నారు",
+  "Out for delivery": "డెలివరీకి బయలుదేరింది",
+  "Next step": "తదుపరి దశ",
+  "Delivered": "డెలివరీ పూర్తయింది",
+  "We'll update you here": "ఇక్కడ సమాచారం అందిస్తాము",
+  "Verify handling vlog": "పంట నిర్వహణ వీడియోను ధృవీకరించండి",
+  "Report an issue": "సమస్యను నివేదించండి",
+  "Order-specific handling proof": "ఈ ఆర్డర్ నిర్వహణకు సంబంధించిన ఆధారం",
+  "Order ID": "ఆర్డర్ ఐడీ",
+  "VERIFY YOUR ORDER HANDLING VLOG": "మీ ఆర్డర్ నిర్వహణ వీడియోను ధృవీకరించండి",
+  "PENDING VIDEO": "వీడియో ఇంకా రాలేదు",
+  "TOKEN MATCH · DEMO": "టోకెన్ సరిపోలింది · డెమో",
+  "MISMATCH · NOT VERIFIED": "టోకెన్ సరిపోలలేదు · ధృవీకరించలేదు",
+  "The order has been placed. Its packaging vlog has not been uploaded yet. Do not call it verified.": "ఆర్డర్ ఇచ్చారు. ప్యాకింగ్ వీడియో ఇంకా అప్‌లోడ్ కాలేదు. దీన్ని ధృవీకరించబడిందని భావించవద్దు.",
+  "Sample packing vlog for this order: token is visible and equals the token on its bill.": "ఈ ఆర్డర్ నమూనా ప్యాకింగ్ వీడియోలోని టోకెన్, బిల్లులోని టోకెన్‌తో సరిపోలింది.",
+  "The video token is different from the bill token. Evidence must not be accepted.": "వీడియో టోకెన్, బిల్లు టోకెన్ వేర్వేరుగా ఉన్నాయి. ఈ ఆధారాన్ని అంగీకరించకూడదు.",
+  "Video token: not yet uploaded": "వీడియో టోకెన్: ఇంకా అప్‌లోడ్ కాలేదు",
+  "Video token": "వీడియో టోకెన్",
+  "Handling video is visual evidence only. It does not establish pesticide or chemical safety.": "నిర్వహణ వీడియో కేవలం దృశ్య ఆధారం మాత్రమే. పురుగుమందులు లేదా రసాయనాల భద్రతను ఇది నిర్ధారించదు.",
+  "View sample matching vlog": "సరిపోయే నమూనా వీడియో చూడండి",
+  "View mismatch example": "సరిపోని ఉదాహరణ చూడండి",
+  "Back to pending order": "పెండింగ్ ఆర్డర్‌కు వెళ్లండి",
+  "Back to order tracking": "ఆర్డర్ ట్రాకింగ్‌కు తిరిగి వెళ్లండి",
+  "Back to order": "ఆర్డర్‌కు తిరిగి వెళ్లండి",
+  "Issue type": "సమస్య రకం",
+  "Produce condition": "ఉత్పత్తి నాణ్యత",
+  "Late delivery": "ఆలస్యమైన డెలివరీ",
+  "Wrong item": "తప్పు వస్తువు",
+  "What happened?": "ఏమి జరిగింది?",
+  "Describe the issue": "సమస్యను వివరించండి",
+  "Add a short description before sending.": "పంపే ముందు చిన్న వివరణ రాయండి.",
+  "Send report": "నివేదిక పంపండి",
+  "Report received": "నివేదిక అందింది",
+  "We've received": "మీ నివేదిక",
+  "your report.": "మాకు అందింది.",
+  "Reference": "సూచన సంఖ్య",
+  "You can return to your order at any time.": "మీరు ఎప్పుడైనా మీ ఆర్డర్‌కు తిరిగి వెళ్లవచ్చు.",
+  "Your orders": "మీ ఆర్డర్లు",
+  "View order bill + handling proof": "ఆర్డర్ బిల్లు, నిర్వహణ ఆధారం చూడండి",
+  "No orders yet.": "ఇంకా ఆర్డర్లు లేవు.",
+  "Farm market": "వ్యవసాయ మార్కెట్",
+  "Today's market": "నేటి మార్కెట్",
+  "Hyderabad": "హైదరాబాద్",
+  "Hyderabad market": "హైదరాబాద్ మార్కెట్",
+  "Your harvest. Your price.": "మీ పంట. మీ ధర.",
+  "Sell produce": "పంటను అమ్మండి",
+  "Voice help": "వాయిస్ సహాయం",
+  "Market prices": "మార్కెట్ ధరలు",
+  "quintal": "క్వింటాల్",
+  "per quintal · reference range": "క్వింటాల్‌కు · సూచిక ధరల పరిధి",
+  "Reference prices (demo), updated 19 Nov, 10:00 AM.": "సూచిక ధరలు (డెమో), నవంబర్ 19న ఉదయం 10:00 గంటలకు నవీకరించబడ్డాయి.",
+  "Simulate: prices fail to load": "డెమో: ధరల లోడింగ్ విఫలం",
+  "market": "మార్కెట్",
+  "The final price depends on quality, buyer and transport.": "తుది ధర నాణ్యత, కొనుగోలుదారు, రవాణాపై ఆధారపడి ఉంటుంది.",
+  "Compare an offer": "ఆఫర్‌ను పోల్చండి",
+  "Sell red gram": "కందులు అమ్మండి",
+  "Sell tomato": "టమాటా అమ్మండి",
+  "Sell or hold": "అమ్మాలా, నిల్వ ఉంచాలా",
+  "Sell now": "ఇప్పుడే అమ్మండి",
+  "Buyer offer": "కొనుగోలుదారు ఆఫర్",
+  "Transport": "రవాణా",
+  "Net amount": "నికర మొత్తం",
+  "Hold produce": "పంటను నిల్వ ఉంచండి",
+  "Storage cost": "నిల్వ ఖర్చు",
+  "Future price": "భవిష్యత్తు ధర",
+  "Unknown": "తెలియదు",
+  "Compare costs before choosing. A future selling price is not guaranteed.": "నిర్ణయించే ముందు ఖర్చులు పోల్చండి. భవిష్యత్తు అమ్మకపు ధరకు హామీ లేదు.",
+  "Create listing": "అమ్మకపు జాబితా సృష్టించండి",
+  "Choose crop": "పంటను ఎంచుకోండి",
+  "Choose market": "మార్కెట్‌ను ఎంచుకోండి",
+  "Quantity (quintal)": "పరిమాణం (క్వింటాళ్లు)",
+  "Asking price / quintal": "అడిగే ధర / క్వింటాల్",
+  "Enter amount": "మొత్తం నమోదు చేయండి",
+  "Asking price per quintal": "క్వింటాల్‌కు అడిగే ధర",
+  "Choose a crop, market and valid quantity.": "పంట, మార్కెట్, సరైన పరిమాణం మరియు ధర ఎంచుకోండి.",
+  "Check price": "ధర చూడండి",
+  "Leave this screen?": "ఈ స్క్రీన్ నుంచి వెళ్లాలా?",
+  "Your listing is not saved yet.": "మీ అమ్మకపు జాబితా ఇంకా సేవ్ కాలేదు.",
+  "Stay and continue": "ఇక్కడే కొనసాగండి",
+  "Leave": "వెళ్లండి",
+  "Your asking price": "మీరు అడిగే ధర",
+  "Within the reference range": "సూచిక ధరల పరిధిలో ఉంది",
+  "Outside the reference range": "సూచిక ధరల పరిధికి బయట ఉంది",
+  "Compare sell or hold": "అమ్మడం, నిల్వ ఉంచడం పోల్చండి",
+  "Continue to listing": "జాబితాకు కొనసాగండి",
+  "Edit asking price": "అడిగే ధర మార్చండి",
+  "Review listing": "జాబితాను సమీక్షించండి",
+  "Pickup location": "పంట సేకరణ స్థలం",
+  "Choose pickup location": "పంట సేకరణ స్థలం ఎంచుకోండి",
+  "Availability": "లభ్యత",
+  "Ready for pickup": "సేకరణకు సిద్ధంగా ఉంది",
+  "Publish listing": "జాబితాను ప్రచురించండి",
+  "Edit details": "వివరాలు మార్చండి",
+  "Hyderabad market gate": "హైదరాబాద్ మార్కెట్ గేట్",
+  "Farm collection point": "పొలం నుంచి సేకరణ కేంద్రం",
+  "Choose a pickup location.": "పంట సేకరణ స్థలాన్ని ఎంచుకోండి.",
+  "Listing published": "జాబితా ప్రచురించబడింది",
+  "Your produce is live.": "మీ పంట ఇప్పుడు అమ్మకానికి సిద్ధంగా ఉంది.",
+  "View my listing": "నా అమ్మకపు జాబితా చూడండి",
+  "Back to market": "మార్కెట్‌కు తిరిగి వెళ్లండి",
+  "Active": "క్రియాశీలం",
+  "Create another listing": "మరో జాబితా సృష్టించండి",
+  "No listings yet.": "ఇంకా జాబితాలు లేవు.",
+  "Price unavailable": "ధర అందుబాటులో లేదు",
+  "Couldn't load market prices": "మార్కెట్ ధరలను లోడ్ చేయలేకపోయాం",
+  "Check your connection and try again.": "మీ ఇంటర్నెట్ కనెక్షన్ పరిశీలించి మళ్లీ ప్రయత్నించండి.",
+  "Retry": "మళ్లీ ప్రయత్నించండి",
+  "Staff wash hands, wear gloves": "సిబ్బంది చేతులు కడిగి గ్లోవ్స్ ధరిస్తారు",
+  "Produce sorted and cleaned": "ఉత్పత్తులు వర్గీకరించి శుభ్రం చేస్తారు",
+  "Packed in sealed crates": "మూసివేసిన పెట్టెల్లో ప్యాక్ చేస్తారు",
+  "Sample clip": "నమూనా వీడియో",
+  "Visual evidence only; not a chemical-safety test.": "ఇది కేవలం దృశ్య ఆధారం; రసాయన భద్రత పరీక్ష కాదు.",
+  "video": "వీడియో",
+  "s": "సె",
+  "of": "లో"
+});
+const LOCALIZATION_KEYS = Object.keys(TE).sort((a,b) => b.length - a.length);
+const escapeLocalizationRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const localizationPattern = new RegExp(
+  '(?<![A-Za-z])(?:' + LOCALIZATION_KEYS.map(escapeLocalizationRegex).join('|') + ')(?![A-Za-z])', 'g'
+);
+function localizedText(source) {
+  if (!source || S.lang !== 'te') return source;
+  const trimmed = source.trim();
+  if (!trimmed) return source;
+  // Keep order-specific numerical values while localizing the entire sentence.
+  const commission = /^Farmer receives (\d+)% of your payment\. No hidden fees\.$/.exec(trimmed);
+  if (commission) return source.replace(trimmed,
+    `మీ చెల్లింపులో ${commission[1]}% రైతుకు అందుతుంది. అదనపు రుసుములు లేవు.`);
+  return source.replace(localizationPattern, match => TE[match]);
+}
+function localizeRenderedScreen() {
+  document.documentElement.lang = S.lang === 'te' ? 'te' : 'en';
+  document.title = S.lang === 'te'
+    ? 'ఫార్మ్ టు ఫోర్క్ – నమూనా యాప్' : 'Farm to Fork – Hi-Fi Prototype';
+  if (S.lang !== 'te') return;
+  const root = document.getElementById('ph');
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const node of nodes) {
+    if (node.parentElement.closest('textarea, script, style, code')) continue;
+    node.nodeValue = localizedText(node.nodeValue);
+  }
+  for (const element of root.querySelectorAll('[placeholder], [aria-label], [title]')) {
+    for (const attribute of ['placeholder', 'aria-label', 'title']) {
+      if (element.hasAttribute(attribute)) {
+        element.setAttribute(attribute, localizedText(element.getAttribute(attribute)));
+      }
+    }
+  }
+}
+
+const t=k=>S.lang=='te'&&TE[k]||k;
+const P=[{id:'tom',n:'Tomato',e:'🍅',p:32,d:'1 kg',kg:1,c:'veg',bg:'#34261f'},{id:'ban',n:'Banana',e:'🍌',p:45,d:'1 dozen',kg:0,c:'fru',bg:'#2e2c1a'},{id:'app',n:'Apple',e:'🍎',p:120,d:'1 kg',kg:1,c:'fru',bg:'#2f2423'},{id:'pot',n:'Potato',e:'🥔',p:28,d:'1 kg',kg:1,c:'veg',bg:'#2c261b'},{id:'bri',n:'Brinjal',e:'🍆',p:29,d:'1 kg',kg:1,c:'veg',bg:'#2a2038'}];
+const CR=[{n:'Red gram',e:'🫘',lo:6500,hi:7000},{n:'Tomato',e:'🍅',lo:2800,hi:3200}];
+const S={s:'signin',role:null,lang:'en',sc:1,ph:'',code:'',err:'',cart:{},pid:null,u:{},f:'all',q:'',toast:0,ord:null,pm:'Cash on delivery',slot:'7–8 PM',proof:'pending',it:'Produce condition',ds:'',sent:0,fr:{crop:'',mkt:'',qty:1,price:'',pick:''},lst:[],mp:0,vid:0,vt:0,lv:0,cr:null};
+const $=i=>document.getElementById(i),pr=(p,u)=>u==500?Math.round(p/2):p,fmt=n=>'₹'+n.toLocaleString('en-IN');
+const unit=p=>p.kg?(S.u[p.id]||1000):1000,key=p=>p.id+'|'+unit(p),pp=k=>P.find(x=>x.id==k.split('|')[0]);
+const cnt=()=>Object.values(S.cart).reduce((a,b)=>a+b,0),sub=()=>Object.keys(S.cart).reduce((a,k)=>a+pr(pp(k).p,+k.split('|')[1])*S.cart[k],0),FEES={h:4,d:10,x:2};
+const go=s=>{if(['pay','review','sell'].includes(s))S.sent=0;S.s=s;S.toast=0;S.err='';S.lv=0;R();document.querySelector('main')&&(document.querySelector('main').scrollTop=0)};
+const BACK={verify:'signin',role:'verify',prod:'shop',cart:'shop',pay:'cart',track:'orders',proof:'track',rep:'track',repok:'track',mdet:'market',sh:'mdet',sell:'market',ask:'sell',review:'ask',pick:'review',unav:'market',pub:'market',empty:'shop'};
+function bk(){if(S.s=='sell'&&(S.fr.crop||S.fr.price)&&!S.lv){S.lv=1;R();return}go(BACK[S.s]||'signin')}
+const say=x=>{try{const u=new SpeechSynthesisUtterance(x);u.lang=S.lang=='te'?'te-IN':'en-IN';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}};
+const hd=(ti,b)=>`<div class="hd">${b?`<button class="bk" onclick="bk()" aria-label="Back">← ${t('Back')}</button>`:''}<h1>${ti}</h1></div>`;
+const stp=(q,a,m)=>`<div class="st"><button onclick="${m}" aria-label="Decrease">−</button><b>${q}</b><button onclick="${a}" aria-label="Increase">+</button></div>`;
+const tabs=(a)=>{const L=S.role=='farmer'?[['market','Market'],['sell','Sell'],['lst','My listings'],['facct','Account']]:[['shop','Shop'],['orders','Orders'],['bacct','Account']];return `<div class="tabs">${L.map(x=>`<button class="${a==x[0]?'on':''}" ${a==x[0]?'aria-current="page"':''} onclick="go('${x[0]}')">${t(x[1])}</button>`).join('')}</div>`};
+function add(id,d){const p=P.find(x=>x.id==id),k=key(p);S.cart[k]=Math.max(0,(S.cart[k]||0)+d);if(!S.cart[k])delete S.cart[k];S.toast=d>0?`✔ ${p.n} added`:0;R()}
+function sign(){if(!/^\d{10}$/.test(S.ph)){S.err='Enter a 10-digit phone number.';R();return}go('verify')}
+function ver(){if(S.code!='1234'){S.err='That code is incorrect. Try again.';R();return}go('role')}
+function place(b){if(S.sent)return;S.sent=1;const d=new Date();S.ord={id:'FTF208',items:Object.keys(S.cart).map(k=>S.cart[k]+' × '+pp(k).n).join(', '),total:sub()+16,pm:S.pm,slot:S.slot,time:d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' · '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})};S.cart={};go('placed')}
+function chk(){const f=S.fr,q=+f.qty,p=+f.price;if(!f.crop||!f.mkt||!(q>0)||!(p>0)){S.err='Choose a crop, market and valid quantity.';R();return}go('ask')}
+function pub(){if(!S.fr.pick){S.err='Choose a pickup location.';R();return}if(S.sent)return;S.sent=1;S.lst.push({...S.fr});go('pubd');setTimeout(()=>say(S.lang=='te'?'మీ పంట అమ్మకానికి సిద్ధంగా ఉంది':'Your produce is live'),300)}
+function sendRep(){if(!S.ds.trim()){S.err='Add a short description before sending.';R();return}go('repok')}
+function vid(){S.vid=1;S.vt=0;clearInterval(S.iv);R();S.iv=setInterval(()=>{S.vt++;if(S.vt>=28)clearInterval(S.iv);S.vid&&R()},1000)}
+function jump(s){const fs=['market','mdet','sh','sell','ask','review','pick','pubd','lst','facct','unav'];S.role=['signin','verify','role'].includes(s)?null:(fs.includes(s)?'farmer':'buyer');S.sent=0;S.mp=0;
+if(S.role=='buyer'&&['prod','cart','pay'].includes(s)){S.cart={'tom|1000':1};S.pid='tom'}if(S.role=='buyer'&&['empty'].includes(s))S.cart={};if(s=='empty')s='cart';
+if(!S.ord&&['track','proof','rep','repok','orders','placed'].includes(s))S.ord={id:'FTF208',items:'1 × Tomato',total:48,pm:'Cash on delivery',slot:'7–8 PM',time:'19 Nov 2026 · 10:15 pm'};
+if(S.role=='farmer'&&['ask','review','pick','pubd'].includes(s))S.fr={crop:'Red gram',mkt:'Hyderabad',qty:1,price:6800,pick:s=='pubd'?'Hyderabad market gate':''};if(s=='pubd'&&!S.lst.length)S.lst=[{...S.fr}];
+if(s=='lst'&&!S.lst.length)S.lst=[{crop:'Red gram',mkt:'Hyderabad',qty:1,price:6800,pick:'Hyderabad market gate'}];go(s)}
+const SM=[['signin','Sign in'],['verify','Verify OTP'],['role','Choose role'],['shop','Buyer · Shop'],['prod','Buyer · Product'],['cart','Buyer · Basket'],['empty','Buyer · Empty basket'],['pay','Buyer · Checkout'],['placed','Buyer · Order placed'],['track','Buyer · Track order'],['proof','Buyer · Handling proof'],['rep','Buyer · Report issue'],['orders','Buyer · Orders'],['bacct','Buyer · Account'],['market','Farmer · Market'],['mdet','Farmer · Market detail'],['sh','Farmer · Sell or hold'],['sell','Farmer · Sell produce'],['ask','Farmer · Asking price'],['review','Farmer · Review listing'],['pick','Farmer · Pickup'],['pubd','Farmer · Published'],['lst','Farmer · My listings'],['unav','Farmer · Price unavailable'],['facct','Farmer · Account']];
+const V={
+signin:()=>`<main><div class="cd" style="width:56px;text-align:center;font-family:Orbitron">F/F</div><h2 style="margin:14px 0 20px">FARM<br>TO FORK</h2><h1>Sign in</h1><div class="lbl">Phone number</div><input inputmode="numeric" maxlength="10" placeholder="+91  Phone number" value="${S.ph}" class="${S.err?'bad':''}" oninput="S.ph=this.value" aria-label="Phone number">${S.err?`<div class="er">✖ ${S.err}</div>`:''}<button class="pri" onclick="sign()">Continue</button><p class="sub">Demo: enter any 10 digits.</p></main>`,
+verify:()=>`${hd('Verify number',1)}<main><p>+91 ${S.ph}</p><div class="lbl">4-digit code</div><input inputmode="numeric" maxlength="4" placeholder="– – – –" value="${S.code}" class="${S.err?'bad':''}" oninput="S.code=this.value" aria-label="4-digit code">${S.err?`<div class="er">✖ ${S.err}</div>`:''}<button class="pri" onclick="ver()">Verify</button><div class="row" style="margin-top:8px"><button class="bk" onclick="S.code='';S.err='';R()">Resend code</button><button class="bk" onclick="go('signin')">Change number</button></div><p class="sub">Demo code: 1234</p></main>`,
+role:()=>`${hd('Choose your role')}<main><h2 style="margin:12px 0 18px">How will you use Farm to Fork?</h2><button class="cd btn" onclick="S.role='buyer';go('shop')"><div class="row"><div><h1>🛒 I'm a buyer</h1><div class="sub">Shop vegetables and fruits</div></div><span class="ac">→</span></div></button><button class="cd btn" onclick="S.role='farmer';go('market')"><div class="row"><div><h1>🧑‍🌾 I'm a farmer</h1><div class="sub">Sell produce and view market prices</div></div><span class="ac">→</span></div></button></main>`,
+shop:()=>{const L=P.filter(p=>(S.f=='all'||(S.f=='u50'?p.p<=50:p.c==S.f))&&p.n.toLowerCase().includes(S.q.toLowerCase()));return `<div class="hd"><h1 class="ac">FARM TO FORK</h1></div><main><div class="sub">Home · Bengaluru 560001 ⌄</div><input placeholder="Search vegetables, fruits…" value="${S.q}" oninput="S.q=this.value;R();this.focus()" aria-label="Search" style="margin:8px 0"><div class="chips" role="group" aria-label="Filters">${[['all','All'],['veg','Veg'],['fru','Fruits'],['u50','Under ₹50']].map(x=>`<button class="chip ${S.f==x[0]?'on':''}" aria-pressed="${S.f==x[0]}" onclick="S.f='${x[0]}';R()">${x[1]}</button>`).join('')}</div><h1 style="margin:6px 0">Fresh picks</h1><div class="sub" style="margin-bottom:8px">From local farms</div>${L.length?'':'<p>No produce found.</p>'}<div class="grid">${L.map(p=>{const q=S.cart[key(p)]||0;return `<div class="cd" style="padding:8px"><button class="tile" style="background:${p.bg}" onclick="S.pid='${p.id}';go('prod')" aria-label="Open ${p.n}">${p.e}</button><div style="margin-top:6px"><b>${p.n}</b></div><div class="row"><div><div>${fmt(pr(p.p,unit(p)))}</div><div class="sub">${p.kg&&unit(p)==500?'500 g':p.d}</div></div>${q?stp(q,`add('${p.id}',1)`,`add('${p.id}',-1)`):`<button class="ac" onclick="add('${p.id}',1)" aria-label="Add ${p.n}">ADD</button>`}</div></div>`}).join('')}</div></main>${S.toast?`<div class="toast" role="status"><span>${S.toast}</span><button onclick="go('cart')">View basket →</button></div>`:''}${tabs('shop')}`},
+prod:()=>{const p=P.find(x=>x.id==S.pid),u=unit(p);return `${hd(p.n,1)}<main><div class="tile" style="background:${p.bg};font-size:6em;min-height:170px;border-radius:14px">${p.e}</div><h2 style="margin-top:12px">${p.n}</h2><div class="ac" style="font-size:1.3em;margin:4px 0">${fmt(pr(p.p,u))} / ${p.kg?(u==500?'500 g':'1 kg'):'1 dozen'}</div>${p.kg?`<div class="chips" role="group" aria-label="Pack size"><button class="chip ${u==500?'on':''}" aria-pressed="${u==500}" onclick="S.u['${p.id}']=500;R()">500 g</button><button class="chip ${u==1000?'on':''}" aria-pressed="${u==1000}" onclick="S.u['${p.id}']=1000;R()">1 kg</button></div>`:''}<div class="sub">Farm batch · ${p.id.toUpperCase()}-208</div><button class="cd btn" style="margin-top:10px" onclick="vid()"><b>▶ Handling record · video 28 s</b><div class="sub">Harvest, sorting and packing</div></button><div class="wn">⚠ Chemical safety · No lab result available</div><button class="pri" onclick="add('${p.id}',1);S.toast=0;go('cart')">${t('Add to basket')} · ${fmt(pr(p.p,u))}</button></main>`},
+cart:()=>{const ks=Object.keys(S.cart);if(!ks.length)return `${hd('Your basket',1)}<main><h2 style="margin:50px 0 8px">Your basket is empty</h2><p class="sub">Find something fresh for your kitchen.</p><button class="pri" onclick="go('shop')">Browse produce</button></main>`;const s=sub();return `${hd('Your basket',1)}<main>${ks.map(k=>{const p=pp(k),u=+k.split('|')[1];return `<div class="cd row"><div class="row" style="gap:10px"><span style="font-size:2.2em">${p.e}</span><div><b>${p.n}</b><div class="sub">${p.kg?(u==500?'500 g':'1 kg'):'1 dozen'} · ${fmt(pr(p.p,u))}</div></div></div>${stp(S.cart[k],`S.cart['${k}']++;R()`,`S.cart['${k}']--;if(!S.cart['${k}'])delete S.cart['${k}'];R()`)}</div>`}).join('')}<h1 style="margin:14px 0 4px">Price breakdown</h1><table><tr><td>Farmer receives</td><td>${fmt(s)}</td></tr><tr><td>Handling</td><td>${fmt(FEES.h)}</td></tr><tr><td>Delivery</td><td>${fmt(FEES.d)}</td></tr><tr><td>Tax</td><td>${fmt(FEES.x)}</td></tr><tr class="t"><td>Total</td><td>${fmt(s+16)}</td></tr></table><div class="sub">Farmer receives ${Math.round(s*100/(s+16))}% of your payment. No hidden fees.</div><button class="pri" onclick="S.sent=0;go('pay')">Continue · ${fmt(s+16)}</button></main>`},
+pay:()=>{const s=sub();return `${hd('Checkout',1)}<main><div class="cd row"><div><div class="sub">Deliver to Home</div>Bengaluru · 560001</div><button onclick="S.toast='Change address (demo)';R()">Change</button></div><div class="cd"><div class="sub">Your order</div>${Object.keys(S.cart).map(k=>`${S.cart[k]} × ${pp(k).n} (${+k.split('|')[1]==500?'500 g':pp(k).d})`).join('<br>')}</div><div class="lbl">Delivery slot</div><div class="chips">${['5–6 PM','6–7 PM','7–8 PM'].map(x=>`<button class="chip ${S.slot==x?'on':''}" aria-pressed="${S.slot==x}" onclick="S.slot='${x}';R()">${x}</button>`).join('')}</div><div class="lbl">Payment (last used)</div><div class="chips">${['Cash on delivery','UPI · ending 4417'].map(x=>`<button class="chip ${S.pm==x?'on':''}" aria-pressed="${S.pm==x}" onclick="S.pm='${x}';R()">${x}</button>`).join('')}</div><div class="row" style="margin-top:12px"><span>Total to pay</span><span class="ac" style="font-size:1.4em">${fmt(s+16)}</span></div><button class="pri" ${S.sent?'disabled':''} onclick="place()">${t('Place order')}</button></main>${S.toast?`<div class="toast" role="status"><span>${S.toast}</span></div>`:''}`},
+placed:()=>`${hd('Order placed')}<main><div class="ok"><div class="ck" aria-hidden="true">✔</div><h2>Freshness<br>on its way.</h2></div><div class="cd"><div>Order #${S.ord.id}</div><div class="sub">${S.ord.pm} · ${S.ord.slot}</div><div class="ac sub">Bill #${S.ord.id} · ${S.ord.time}<br>Token: ${S.ord.id}-TK-7642 · Items: ${S.ord.items} · ${fmt(S.ord.total)}</div></div><button class="pri" onclick="go('track')">Track order</button><button class="sec" onclick="go('shop')">Continue shopping</button></main>`,
+track:()=>`${hd('Track order',1)}<main><p>Order #${S.ord.id}</p>${[['Order confirmed','Your order has been received',1],['Packing','The farm is preparing your produce',1],['Out for delivery','Next step',0],['Delivered',"We'll update you here",0]].map((x,i)=>`<div class="step"><div class="dot ${x[2]?'d':''}">${x[2]?'✔':i+1}</div><div><b>${x[0]}</b><div class="sub">${x[1]}</div></div></div>`).join('')}<button class="cd btn ac" onclick="S.proof='pending';go('proof')">Verify handling vlog · token ${S.ord.id}</button><button class="sec" onclick="S.ds='';S.it='Produce condition';go('rep')">Report an issue</button></main>${tabs('orders')}`,
+proof:()=>{const m={pending:['PENDING VIDEO','wn','The order has been placed. Its packaging vlog has not been uploaded yet. Do not call it verified.','Video token: not yet uploaded','View sample matching vlog','match'],match:['TOKEN MATCH · DEMO','ac','Sample packing vlog for this order: token is visible and equals the token on its bill.','Video token: FTF208-TK-7642','View mismatch example','mis'],mis:['MISMATCH · NOT VERIFIED','er','The video token is different from the bill token. Evidence must not be accepted.','Video token: FTF207-TK-5521','Back to pending order','pending']}[S.proof];return `${hd('Order-specific handling proof',1)}<main><div class="cd">Order ID #${S.ord.id}<br><span class="ac">Token ${S.ord.id}-TK-7642</span><div class="sub">${S.ord.time}</div></div><div class="lbl">VERIFY YOUR ORDER HANDLING VLOG</div><div class="cd"><b class="${m[1]}">${S.proof=='match'?'✔':S.proof=='mis'?'✖':'⏳'} ${m[0]}</b><p class="sub">${m[2]}</p><div class="sub">${m[3]}</div></div><div class="wn sub">Handling video is visual evidence only. It does not establish pesticide or chemical safety.</div><button class="pri" onclick="S.proof='${m[5]}';R()">${m[4]}</button><button class="sec" onclick="go('track')">Back to order tracking</button></main>`},
+rep:()=>`${hd('Report an issue',1)}<main><div class="lbl">Issue type</div><div class="chips">${['Produce condition','Late delivery','Wrong item'].map(x=>`<button class="chip ${S.it==x?'on':''}" aria-pressed="${S.it==x}" onclick="S.it='${x}';R()">${x}</button>`).join('')}</div><div class="lbl">What happened?</div><textarea rows="4" class="${S.err?'bad':''}" placeholder="Describe the issue" oninput="S.ds=this.value" aria-label="Describe the issue">${S.ds}</textarea>${S.err?`<div class="er">✖ ${S.err}</div>`:''}<button class="pri" onclick="sendRep()">Send report</button></main>`,
+repok:()=>`${hd('Report received',1)}<main><div class="ok"><div class="ck">✔</div><h2>We've received<br>your report.</h2><p class="sub">Reference #R208 · You can return to your order at any time.</p></div><button class="pri" onclick="go('track')">Back to order</button></main>`,
+orders:()=>`${hd('Your orders')}<main>${S.ord?`<div class="cd"><b>#${S.ord.id} · Packing</b><div class="sub">${S.ord.pm}</div><button class="pri" onclick="go('track')">Track order</button></div><button class="cd btn ac" onclick="S.proof='pending';go('proof')">View order bill + handling proof</button>`:'<p class="sub">No orders yet.</p><button class="pri" onclick="go(\'shop\')">Browse produce</button>'}</main>${tabs('orders')}`,
+bacct:()=>`${hd('Your account')}<main><p>+91 ${S.ph||'98765 43210'}</p><div class="sub">Buyer</div><button class="sec" onclick="go('role')">Switch role</button><button class="sec" onclick="S.ph='';S.code='';S.cart={};go('signin')">Sign out</button></main>${tabs('bacct')}`,
+facct:()=>`${hd('Your account')}<main><p>+91 ${S.ph||'98765 43210'}</p><div class="sub">Farmer</div><button class="sec" onclick="go('role')">Switch role</button><button class="sec" onclick="S.ph='';S.code='';go('signin')">Sign out</button></main>${tabs('facct')}`,
+market:()=>`<div class="hd"><div><h1>Farm market</h1><div class="sub">Hyderabad · Today's market</div></div></div><main><div class="cd" style="background:#11302a"><h2>${t('Your harvest. Your price.')}</h2><div class="row"><button class="pri" style="margin:10px 8px 0 0" onclick="S.fr={crop:'',mkt:'',qty:1,price:'',pick:''};go('sell')">+ ${t('Sell produce')}</button><button style="margin-top:10px" aria-label="Voice help" onclick="say('${S.lang=='te'?'అమ్మడానికి ప్లస్ బటన్ నొక్కండి':'Tap Sell produce to list your crop. Tap a crop to see its price.'}')">🔊</button></div></div><h1 style="margin:12px 0 8px">${t('Market prices')}</h1>${CR.map(c=>`<button class="cd btn" onclick="S.cr='${c.n}';go('mdet')"><div class="row"><div class="row" style="gap:10px"><span style="font-size:2.2em">${c.e}</span><div><b>${t(c.n)}</b><div class="ac sub">${fmt(c.lo)}–${fmt(c.hi)} / quintal</div></div></div><span class="ac">→</span></div></button>`).join('')}<div class="sub">Reference prices (demo), updated 19 Nov, 10:00 AM.</div><button class="sec" onclick="go('unav')">Simulate: prices fail to load</button></main>${tabs('market')}`,
+mdet:()=>{const c=CR.find(x=>x.n==S.cr)||CR[0];return `${hd(c.n+' market',1)}<main><div class="sub">Hyderabad market</div><div class="tile" style="background:#2a2a1b;font-size:5em;min-height:150px;margin:8px 0">${c.e}</div><div class="big">${fmt(c.lo)}–${fmt(c.hi).slice(1)}</div><div class="sub">per quintal · reference range</div><p>The final price depends on quality, buyer and transport.</p><button class="pri" onclick="go('sh')">Compare an offer</button><button class="sec" onclick="S.fr={crop:'${c.n}',mkt:'Hyderabad',qty:1,price:'',pick:''};go('sell')">Sell ${c.n.toLowerCase()}</button></main>`},
+sh:()=>`${hd('Sell or hold',1)}<main><div class="cd"><h1>Sell now</h1><table><tr><td>Buyer offer</td><td>₹6,700</td></tr><tr><td>Transport</td><td>− ₹80</td></tr><tr class="t"><td>Net amount</td><td>₹6,620</td></tr></table></div><div class="cd"><h1>Hold produce</h1><table><tr><td>Storage cost</td><td>₹120</td></tr><tr><td>Future price</td><td class="wn">Unknown</td></tr></table></div><p class="sub">Compare costs before choosing. A future selling price is not guaranteed.</p><button class="pri" onclick="go('sell')">Create listing</button></main>`,
+sell:()=>{const f=S.fr,b=S.err?'bad':'';return `${hd(t('Sell produce'),1)}<main><div class="lbl">${t('Choose crop')}</div><div class="grid">${CR.map(c=>`<button class="cd ${f.crop==c.n?'on':''}" aria-pressed="${f.crop==c.n}" style="min-height:96px;margin:0" onclick="S.fr.crop='${c.n}';R()"><div style="font-size:2em">${c.e}</div>${t(c.n)}${f.crop==c.n?' ✔':''}</button>`).join('')}</div><div class="lbl">${t('Choose market')}</div><button class="cd btn ${f.mkt?'on':''}" style="margin:0" aria-pressed="${!!f.mkt}" onclick="S.fr.mkt='Hyderabad';R()">${t('Hyderabad')}${f.mkt?' ✔':''}</button><div class="lbl">${t('Quantity (quintal)')}</div>${stp(f.qty,`S.fr.qty=+S.fr.qty+1;R()`,`S.fr.qty=Math.max(1,S.fr.qty-1);R()`)}<div class="lbl">${t('Asking price / quintal')}</div><input type="number" inputmode="numeric" class="${b}" placeholder="Enter amount" value="${f.price}" oninput="S.fr.price=this.value" aria-label="Asking price per quintal">${S.err?`<div class="er">✖ ${S.err}</div>`:''}<button class="pri" onclick="chk()">${t('Check price')}</button></main>${S.lv?`<div class="ov"><div class="sh"><h1>Leave this screen?</h1><p class="sub">Your listing is not saved yet.</p><button class="pri" onclick="S.lv=0;R()">Stay and continue</button><button class="sec" onclick="S.lv=0;go('market')">Leave</button></div></div>`:''}${tabs('sell')}`},
+ask:()=>{const f=S.fr,c=CR.find(x=>x.n==f.crop)||CR[0],p=+f.price,i=p>=c.lo&&p<=c.hi;return `${hd('Your asking price',1)}<main><div class="sub">${f.crop} · ${f.qty} quintal</div><div class="big" style="margin:8px 0">${fmt(p)}</div><div class="cd"><b class="${i?'ac':'wn'}">${i?'✔ Within the reference range':'⚠ Outside the reference range'}</b><div class="sub">${f.mkt}: ${fmt(c.lo)}–${fmt(c.hi)}</div></div><button class="sec" onclick="go('sh')">Compare sell or hold</button><button class="pri" onclick="go('review')">Continue to listing</button><button class="bk" style="margin-top:8px" onclick="go('sell')">Edit asking price</button></main>`},
+review:()=>{const f=S.fr,c=CR.find(x=>x.n==f.crop)||CR[0];return `${hd('Review listing',1)}<main><div class="cd row" style="justify-content:flex-start;gap:12px"><span style="font-size:2.4em">${c.e}</span><div><h1>${f.crop}</h1><div class="ac">${f.qty} quintal · ${fmt(+f.price)}</div></div></div><div class="lbl">Pickup location</div><button class="cd btn ${S.err?'bad':''}" style="${S.err?'border-color:var(--er)':''}" onclick="go('pick')">${f.pick||'Choose pickup location'} →</button><div class="lbl">Availability</div><div class="cd">Ready for pickup</div>${S.err?`<div class="er">✖ ${S.err}</div>`:''}<button class="pri" ${S.sent?'disabled':''} onclick="pub()">${t('Publish listing')}</button><button class="sec" onclick="go('sell')">Edit details</button></main>`},
+pick:()=>`${hd('Pickup location',1)}<main>${['Hyderabad market gate','Farm collection point'].map(x=>`<button class="cd btn ${S.fr.pick==x?'on':''}" style="min-height:64px" onclick="S.fr.pick='${x}';go('review')">${x}${S.fr.pick==x?' ✔':''}</button>`).join('')}</main>`,
+pubd:()=>`${hd('Listing published')}<main><div class="ok"><div class="ck" aria-hidden="true">✔</div><h2>${t('Your produce is live.')}</h2><p class="sub">${S.fr.crop} · ${S.fr.qty} quintal<br>${fmt(+S.fr.price)} · ${S.fr.pick}</p></div><button class="pri" onclick="go('lst')">View my listing</button><button class="sec" onclick="go('market')">Back to market</button></main>`,
+lst:()=>`${hd('My listings')}<main>${S.lst.length?S.lst.map(l=>`<div class="cd"><h1>${l.crop}</h1><div class="ac">${fmt(+l.price)} · ${l.qty} quintal · <span class="pill">✔ Active</span></div><div class="sub">${l.pick}</div></div>`).join(''):'<p class="sub">No listings yet.</p>'}<button class="pri" onclick="S.fr={crop:'',mkt:'',qty:1,price:'',pick:''};go('sell')">+ Create another listing</button></main>${tabs('lst')}`,
+unav:()=>`${hd('Price unavailable',1)}<main><h2 style="margin:60px 0 10px">Couldn't load market prices</h2><p class="sub">Check your connection and try again.</p><button class="pri" onclick="go('market')">${t('Retry')}</button><button class="sec" onclick="go('market')">Back to market</button></main>`};
+function R(){const top=`<div class="top"><button onclick="S.lang=S.lang=='en'?'te':'en';R()" aria-label="${S.lang=='en'?'Switch to Telugu':'Switch to English'}">${S.lang=='en'?'<b class="ac">EN</b> / తె':'EN / <b class="ac">తెలుగు</b>'}</button><button onclick="S.sc=Math.max(.85,S.sc-.15);document.documentElement.style.setProperty('--sc',S.sc);R()" aria-label="Smaller text">A−</button><button onclick="S.sc=Math.min(1.6,S.sc+.15);document.documentElement.style.setProperty('--sc',S.sc);R()" aria-label="Larger text">A+</button><button onclick="S.mp=1;R()" aria-label="Screen map">🗺 Map</button></div>`;
+const mp=S.mp?`<div class="ov"><div class="sh"><div class="row"><h1>Screen map</h1><button onclick="S.mp=0;R()">✕ Close</button></div>${SM.map(x=>`<button class="sec" style="min-height:48px;text-align:left" onclick="jump('${x[0]}')">${x[1]}</button>`).join('')}</div></div>`:'';
+const vv=S.vid?`<div class="ov"><div class="sh"><div class="row"><h1>Handling record</h1><button onclick="clearInterval(S.iv);S.vid=0;R()">✕ Close</button></div><div class="vid"><div>${S.vt>=28?'↻':'⏸'}</div><div class="bar"><i style="width:${Math.min(100,S.vt/28*100)}%"></i></div><div class="cap">${S.vt<10?'Staff wash hands, wear gloves · చేతులు కడుక్కొని గ్లోవ్స్':S.vt<20?'Produce sorted and cleaned · శుభ్రం చేసి వేరు చేయడం':'Packed in sealed crates · సీల్ చేసిన డబ్బాలలో'}</div></div><p class="sub">Sample clip · ${S.vt}s / 28s. Visual evidence only; not a chemical-safety test.</p></div></div>`:'';
+$('ph').innerHTML=top+V[S.s]()+vv+mp;localizeRenderedScreen()}
+R();
+</script></body></html>
